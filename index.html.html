@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2214%22%20fill%3D%22%23137A6E%22/%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2220%22%20r%3D%224%22%20fill%3D%22%23C49A3F%22/%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2232%22%20r%3D%224%22%20fill%3D%22%23C49A3F%22/%3E%3Ccircle%20cx%3D%2218%22%20cy%3D%2244%22%20r%3D%224%22%20fill%3D%22%23C49A3F%22/%3E%3Crect%20x%3D%2227%22%20y%3D%2217%22%20width%3D%2223%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23fff%22/%3E%3Crect%20x%3D%2227%22%20y%3D%2229%22%20width%3D%2223%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23fff%22/%3E%3Crect%20x%3D%2227%22%20y%3D%2241%22%20width%3D%2217%22%20height%3D%226%22%20rx%3D%223%22%20fill%3D%22%23fff%22/%3E%3C/svg%3E" />
+<title>PRÊMIO ORGULHO DA TERRA 2026 · Convidados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  /* ============================================================
+     CONFIGURAÇÃO VISUAL (tokens)
+     ============================================================ */
+  :root{
+    --ink:#0E1726; --ink-2:#16223A;
+    --bg:#EEF1F5; --card:#FFFFFF;
+    --line:#E4E8EE; --line-2:#EEF1F5;
+    --text:#1C2433; --muted:#6B7686; --muted-2:#8A93A3;
+    --primary:#137A6E; --primary-2:#18A294; --primary-soft:#E6F2F0;
+    --accent:#C49A3F;
+    --green:#15876B; --green-soft:#E6F4EF;
+    --amber:#C2851F; --amber-soft:#FBF1DD;
+    --slate:#5C6779;
+
+    --c-cliente:#137A6E; --c-prospect:#2F5FB3; --c-interno:#5C6779;
+    --c-agencia:#C49A3F; --c-casting:#A65576; --c-outros:#9AA6B5;
+
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 8px 24px rgba(16,24,40,.06);
+    --shadow-sm:0 1px 2px rgba(16,24,40,.06), 0 3px 10px rgba(16,24,40,.05);
+    --radius:16px; --radius-sm:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Montserrat',system-ui,sans-serif;
+    background:var(--bg); color:var(--text);
+    -webkit-font-smoothing:antialiased; line-height:1.45;
+  }
+  .num{font-variant-numeric:tabular-nums; font-feature-settings:"tnum";}
+  .wrap{max-width:1200px; margin:0 auto; padding:0 22px 64px;}
+
+  /* ---------- Cabeçalho ---------- */
+  header.topbar{
+    background:linear-gradient(135deg,var(--ink) 0%, var(--ink-2) 100%);
+    color:#fff;
+  }
+  .topbar-inner{
+    max-width:1200px; margin:0 auto; padding:26px 22px 28px;
+    display:flex; align-items:flex-end; justify-content:space-between;
+    flex-wrap:wrap; gap:16px;
+  }
+  .brand-eyebrow{
+    font-size:11px; letter-spacing:.22em; text-transform:uppercase;
+    color:rgba(255,255,255,.55); font-weight:600; margin-bottom:8px;
+  }
+  .brand-title{font-size:26px; font-weight:700; letter-spacing:-.01em; margin:0;}
+  .brand-sub{font-size:13px; color:rgba(255,255,255,.6); margin-top:4px; font-weight:400;}
+  .topbar-left{display:flex; flex-direction:column; gap:16px;}
+  .viewnav{display:inline-flex; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); border-radius:11px; padding:4px; gap:4px; width:max-content;}
+  .viewnav button{
+    appearance:none; border:none; background:none; cursor:pointer; font-family:inherit;
+    color:rgba(255,255,255,.7); font-size:13px; font-weight:600; padding:7px 18px; border-radius:8px; transition:.15s;
+  }
+  .viewnav button:hover{color:#fff;}
+  .viewnav button.active{background:#fff; color:var(--ink);}
+  .viewnav button:focus-visible{outline:2px solid var(--primary-2); outline-offset:2px;}
+  .topbar-meta{display:flex; align-items:center; gap:14px;}
+  .updated{font-size:12px; color:rgba(255,255,255,.6); text-align:right;}
+  .updated b{display:block; color:#fff; font-weight:600; font-size:13px;}
+  .btn-refresh{
+    display:inline-flex; align-items:center; gap:8px;
+    background:rgba(255,255,255,.10); color:#fff; border:1px solid rgba(255,255,255,.18);
+    padding:9px 14px; border-radius:10px; font-family:inherit; font-size:13px; font-weight:600;
+    cursor:pointer; transition:.18s;
+  }
+  .btn-refresh:hover{background:rgba(255,255,255,.18);}
+  .btn-refresh:focus-visible{outline:2px solid var(--primary-2); outline-offset:2px;}
+  .btn-refresh.loading .ic{animation:spin 1s linear infinite;}
+  .ic{width:15px; height:15px; display:inline-block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- Estados ---------- */
+  #statusBanner{
+    max-width:1200px; margin:14px auto 0; padding:0 22px;
+  }
+  .alert{
+    border-radius:var(--radius-sm); padding:14px 16px; font-size:13.5px;
+    display:flex; gap:10px; align-items:flex-start;
+  }
+  .alert.err{background:#FCEEEE; color:#8A2A2A; border:1px solid #F1C9C9;}
+  .alert b{font-weight:700;}
+
+  /* ---------- Seções ---------- */
+  .section-head{margin:32px 0 14px; display:flex; align-items:baseline; gap:12px;}
+  .section-head h2{font-size:16px; font-weight:700; margin:0; letter-spacing:-.01em;}
+  .section-head .hint{font-size:12px; color:var(--muted-2); font-weight:500;}
+
+  /* ---------- Cards KPI ---------- */
+  .kpis{
+    margin-top:-30px; position:relative; z-index:2;
+    display:grid; gap:16px; grid-template-columns:repeat(4,1fr);
+  }
+  .kpi{
+    background:var(--card); border-radius:var(--radius); padding:20px 20px 18px;
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .kpi::before{content:""; position:absolute; top:0; left:0; right:0; height:3px; background:var(--primary);}
+  .kpi.k-meta::before{background:var(--accent);}
+  .kpi.k-conf::before{background:var(--green);}
+  .kpi.k-pct::before{background:linear-gradient(90deg,var(--primary),var(--primary-2));}
+  .kpi.k-sem::before{background:var(--amber);}
+  .kpi.k-sem .kpi-value{color:var(--amber);}
+  .kpi-label{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .kpi-value{font-size:34px; font-weight:700; letter-spacing:-.02em; margin:8px 0 2px; line-height:1;}
+  .kpi-sub{font-size:12px; color:var(--muted-2); font-weight:500; min-height:16px;}
+  .kpi-sub .pos{color:var(--green); font-weight:600;}
+  .progress{height:6px; background:var(--line-2); border-radius:99px; margin-top:12px; overflow:hidden;}
+  .progress > i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),#E0BE72); border-radius:99px; transition:width .6s ease;}
+
+  /* ---------- Layout gráfico + pendentes ---------- */
+  .grid-2{display:grid; grid-template-columns:1.15fr .85fr; gap:16px; align-items:start;}
+  .card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); padding:22px;}
+  .card-title{font-size:14px; font-weight:700; margin:0 0 4px;}
+  .card-desc{font-size:12.5px; color:var(--muted-2); margin:0 0 18px; font-weight:500;}
+
+  .chart-row{display:flex; gap:24px; align-items:center; flex-wrap:wrap;}
+  .chart-canvas-box{width:230px; height:230px; flex:0 0 230px; position:relative;}
+  .chart-center{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; pointer-events:none;}
+  .chart-center b{font-size:28px; font-weight:700; letter-spacing:-.02em;}
+  .chart-center span{font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .legend{flex:1 1 220px; display:flex; flex-direction:column; gap:2px; min-width:200px;}
+  .legend-item{display:flex; align-items:center; gap:10px; padding:8px 4px; border-bottom:1px solid var(--line-2);}
+  .legend-item:last-child{border-bottom:none;}
+  .dot{width:11px; height:11px; border-radius:4px; flex:0 0 11px;}
+  .legend-name{font-size:13px; font-weight:600; flex:1;}
+  .legend-qty{font-size:13px; font-weight:700;}
+  .legend-pct{font-size:11.5px; color:var(--muted); font-weight:600; width:42px; text-align:right;}
+
+  /* ---------- Indicador lista prévia pendente ---------- */
+  .pending{
+    background:linear-gradient(180deg,#fff,#FDFAF3);
+    border:1px solid #F2E6CC; border-radius:var(--radius); box-shadow:var(--shadow-sm);
+    padding:22px; height:100%;
+  }
+  .pending-top{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  .pending-badge{
+    width:42px; height:42px; border-radius:12px; background:var(--amber-soft);
+    display:flex; align-items:center; justify-content:center; flex:0 0 42px;
+  }
+  .pending-badge svg{width:22px; height:22px; color:var(--amber);}
+  .pending-h{font-size:13px; font-weight:700;}
+  .pending-h small{display:block; font-size:11.5px; color:var(--muted-2); font-weight:500; margin-top:2px;}
+  .pending-num{font-size:40px; font-weight:700; letter-spacing:-.02em; color:var(--amber); line-height:1; margin:6px 0;}
+  .pending-bar{height:8px; background:#F3E8D2; border-radius:99px; overflow:hidden; margin-top:14px;}
+  .pending-bar > i{display:block; height:100%; background:var(--green); border-radius:99px; transition:width .6s ease;}
+  .pending-foot{display:flex; justify-content:space-between; font-size:11.5px; color:var(--muted); font-weight:600; margin-top:8px;}
+
+  /* ---------- Abas por executivo ---------- */
+  .tabs-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-sm); overflow:hidden;}
+  .tabbar{display:flex; gap:2px; overflow-x:auto; border-bottom:1px solid var(--line); padding:0 8px; scrollbar-width:thin;}
+  .tab{
+    appearance:none; background:none; border:none; font-family:inherit; cursor:pointer;
+    padding:16px 16px 14px; font-size:13px; font-weight:600; color:var(--muted);
+    white-space:nowrap; border-bottom:2.5px solid transparent; transition:.15s; position:relative;
+  }
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--primary); border-bottom-color:var(--primary);}
+  .tab .cnt{
+    display:inline-block; margin-left:6px; background:var(--line-2); color:var(--muted);
+    font-size:11px; font-weight:700; border-radius:99px; padding:1px 7px; min-width:20px;
+  }
+  .tab.active .cnt{background:var(--primary-soft); color:var(--primary);}
+  .tab.tab-sem.active{color:var(--amber); border-bottom-color:var(--amber);}
+  .tab.tab-sem.active .cnt{background:var(--amber-soft); color:var(--amber);}
+  .tab:focus-visible{outline:2px solid var(--primary-2); outline-offset:-4px; border-radius:6px;}
+
+  .panel{padding:22px;}
+  .panel-summary{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px;}
+  .chip{
+    background:var(--line-2); border-radius:10px; padding:10px 14px; min-width:120px;
+  }
+  .chip.green{background:var(--green-soft);}
+  .chip.gold{background:var(--amber-soft);}
+  .chip .l{font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .chip .v{font-size:22px; font-weight:700; letter-spacing:-.01em; margin-top:2px;}
+  .chip.green .v{color:var(--green);} .chip.gold .v{color:var(--amber);}
+
+  table{width:100%; border-collapse:collapse;}
+  .table-scroll{overflow-x:auto;}
+  thead th{
+    text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); font-weight:600; padding:10px 14px; border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  tbody td{padding:13px 14px; font-size:13.5px; border-bottom:1px solid var(--line-2); vertical-align:middle;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FAFBFC;}
+  .cell-name{font-weight:600;}
+  .pill{display:inline-flex; align-items:center; gap:6px; font-size:11.5px; font-weight:600; padding:4px 10px; border-radius:99px;}
+  .pill::before{content:""; width:6px; height:6px; border-radius:50%; background:currentColor;}
+  .pill.ok{background:var(--green-soft); color:var(--green);}
+  .pill.wait{background:var(--amber-soft); color:var(--amber);}
+  .tag{font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:7px; background:var(--line-2); color:var(--slate);}
+
+  .subhead{font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); margin:26px 0 10px; display:flex; align-items:center; gap:8px;}
+  .subhead .ln{flex:1; height:1px; background:var(--line);}
+  .noname-note{font-size:12.5px; color:var(--muted-2); margin:0 0 12px;}
+  .empty{padding:34px 14px; text-align:center; color:var(--muted-2); font-size:13px;}
+
+  /* ---------- Interface Lista ---------- */
+  #viewLista .section-head{margin-top:30px;}
+  .lista-filters{display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end; margin-bottom:18px;}
+  .field{display:flex; flex-direction:column; gap:6px; min-width:180px;}
+  .field.grow{flex:1; min-width:200px;}
+  .field label{font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:600;}
+  .field select, .field input{
+    font-family:inherit; font-size:13.5px; color:var(--text); background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; outline:none; transition:.15s;
+  }
+  .field select:focus, .field input:focus{border-color:var(--primary-2); box-shadow:0 0 0 3px var(--primary-soft);}
+  .btn-clear{
+    appearance:none; font-family:inherit; cursor:pointer; font-size:13px; font-weight:600;
+    color:var(--muted); background:var(--line-2); border:1px solid var(--line); border-radius:10px; padding:11px 16px; transition:.15s;
+  }
+  .btn-clear:hover{color:var(--text); background:#E9EDF2;}
+  .lista-count{font-size:12.5px; color:var(--muted); font-weight:600; margin-bottom:12px;}
+
+  .footer{margin-top:28px; text-align:center; font-size:11.5px; color:var(--muted-2);}
+
+  /* Skeleton */
+  .skel{background:linear-gradient(90deg,#eef1f5 25%,#e3e8ef 37%,#eef1f5 63%); background-size:400% 100%; animation:sk 1.4s ease infinite; border-radius:6px; color:transparent!important;}
+  @keyframes sk{0%{background-position:100% 0}100%{background-position:-100% 0}}
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width:920px){
+    .kpis{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+  }
+  @media (max-width:560px){
+    .topbar-inner{flex-direction:column; align-items:flex-start;}
+    .topbar-meta{width:100%; justify-content:space-between;}
+    .kpis{grid-template-columns:1fr 1fr; gap:12px;}
+    .kpi-value{font-size:28px;}
+    .chart-canvas-box{margin:0 auto;}
+    .wrap{padding:0 14px 48px;}
+    .topbar-inner{padding:22px 16px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.001ms!important; transition-duration:.001ms!important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-left">
+      <div>
+        <div class="brand-eyebrow">Grupo RIC · Controle de Convidados</div>
+        <h1 class="brand-title">PRÊMIO ORGULHO DA TERRA 2026</h1>
+        <div class="brand-sub">Lista prévia e confirmações por responsável pela lista</div>
+      </div>
+      <nav class="viewnav" id="viewnav">
+        <button data-view="painel" class="active">Painel</button>
+        <button data-view="lista">Lista</button>
+      </nav>
+    </div>
+    <div class="topbar-meta">
+      <div class="updated">Atualizado<b id="updatedAt">—</b></div>
+      <button class="btn-refresh" id="btnRefresh" title="Atualizar agora">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+        Atualizar
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="statusBanner"></div>
+
+<div class="wrap">
+
+ <div id="viewPainel">
+  <!-- 2. CARDS DE INDICADORES -->
+  <section class="kpis" id="kpis">
+    <div class="kpi k-meta">
+      <div class="kpi-label">Meta total</div>
+      <div class="kpi-value num skel" id="kMeta">000</div>
+      <div class="kpi-sub" id="kMetaSub">convidados (meta do evento)</div>
+      <div class="progress"><i id="kMetaBar" style="width:0%"></i></div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Cadastrados</div>
+      <div class="kpi-value num skel" id="kCad">000</div>
+      <div class="kpi-sub" id="kCadSub">nomes na lista prévia</div>
+    </div>
+    <div class="kpi k-conf">
+      <div class="kpi-label" style="font-weight:800; color:var(--text);">Total de confirmados</div>
+      <div class="kpi-value num skel" id="kConf">000</div>
+      <div class="kpi-sub" id="kConfSub">total confirmado</div>
+    </div>
+    <div class="kpi k-sem">
+      <div class="kpi-label">Sem nome na lista</div>
+      <div class="kpi-value num skel" id="kSem">0</div>
+      <div class="kpi-sub" id="kSemSub">confirmados sem nome (2ª aba)</div>
+    </div>
+  </section>
+
+  <!-- 3 + 4. GRÁFICO DE PIZZA + INDICADOR DE PENDENTES -->
+  <div class="section-head"><h2>Perfil dos convidados</h2><span class="hint">distribuição por categoria</span></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3 class="card-title">Convidados por categoria</h3>
+      <p class="card-desc">Quantidade e percentual de cada perfil na lista prévia.</p>
+      <div class="chart-row">
+        <div class="chart-canvas-box">
+          <canvas id="pie"></canvas>
+          <div class="chart-center"><b class="num" id="pieTotal">0</b><span>Convidados</span></div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+    </div>
+
+    <div class="pending">
+      <div class="pending-top">
+        <div class="pending-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <div class="pending-h">Lista prévia pendente<small>aguardando confirmação</small></div>
+      </div>
+      <div class="pending-num num" id="pendNum">0</div>
+      <div class="kpi-sub" id="pendSub">convidados ainda não confirmados</div>
+      <div class="pending-bar"><i id="pendBar" style="width:0%"></i></div>
+      <div class="pending-foot"><span id="pendConf">0 confirmados</span><span id="pendCad">0 cadastrados</span></div>
+    </div>
+  </div>
+
+  <!-- 5 + 6. ABAS POR EXECUTIVO + TABELAS -->
+  <div class="section-head"><h2>Confirmados por responsável</h2><span class="hint">apenas confirmados de cada responsável (IDR, OCEPAR, Grupo RIC…)</span></div>
+  <div class="tabs-card">
+    <div class="tabbar" id="tabbar" role="tablist"></div>
+    <div id="panels"></div>
+  </div>
+ </div><!-- /viewPainel -->
+
+ <div id="viewLista" style="display:none">
+  <div class="section-head"><h2>Lista completa</h2><span class="hint">lista prévia + sem nome na lista</span></div>
+  <div class="card">
+    <div class="lista-filters">
+      <div class="field">
+        <label for="fEmpresa">Empresa</label>
+        <select id="fEmpresa"><option value="">Todas as empresas</option></select>
+      </div>
+      <div class="field">
+        <label for="fCargo">Cargo</label>
+        <select id="fCargo"><option value="">Todos os cargos</option></select>
+      </div>
+      <div class="field grow">
+        <label for="fBusca">Buscar por nome</label>
+        <input id="fBusca" type="text" placeholder="Digite um nome..." autocomplete="off" />
+      </div>
+      <button class="btn-clear" id="fLimpar" type="button">Limpar filtros</button>
+    </div>
+    <div class="lista-count" id="listaCount">—</div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr>
+          <th>Nome</th><th>Empresa</th><th>Cargo</th><th>Responsável</th><th>Categoria</th><th>Status</th><th>Origem</th>
+        </tr></thead>
+        <tbody id="listaBody"></tbody>
+      </table>
+    </div>
+  </div>
+ </div><!-- /viewLista -->
+
+  <div class="footer" id="footer">Dados lidos diretamente da planilha · atualização automática a cada 60s</div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO  (ajuste único — depois é só usar a planilha)
+   ============================================================ */
+const CONFIG = {
+  // Prêmio Orgulho da Terra 2026
+  sheetId: '1llGubgHhvMWySm06EIY6j_gKuC4apslxd-MozZMO174',
+
+  // Aba principal (LISTA de convidados):
+  mainGid: '1614382422',
+
+  // 2ª aba — "CONFIRMADOS SEM NOME NA LISTA":
+  secondTab: { gid: '1409803618', name: 'CONFIRMADOS SEM NOME NA LISTA' },
+
+  // Meta fixa do evento (a planilha diz 180, a meta combinada é 200):
+  meta: { gid: null, cell: null, fallback: 200 },
+
+  refreshMs: 60000
+};
+
+/* ============================================================
+   Categorias e cores
+   ============================================================ */
+const CATS = [
+  { key:'AUTORIDADE',   label:'Autoridades',    hex:'#137A6E', soft:'#E6F2F0', match:['autoridade'] },
+  { key:'PREMIADO',     label:'Premiados / Técnicos', hex:'#2F5FB3', soft:'#E8EEF8', match:['premiad','tecnico'] },
+  { key:'ACOMPANHANTE', label:'Acompanhantes',  hex:'#7A5BA8', soft:'#EFEAF6', match:['acompanhante','esposa','esposo','filho','filha'] },
+  { key:'PARCEIRO',     label:'Parceiros',      hex:'#D07A3A', soft:'#FBEEE3', match:['parceiro'] },
+  { key:'NOTAVEL',      label:'Notáveis',       hex:'#A65576', soft:'#F6E9EF', match:['notavel','notvel'] },
+  { key:'CLIENTE',      label:'Clientes',       hex:'#2E8B57', soft:'#E5F3EA', match:['cliente'] },
+  { key:'PROSPECT',     label:'Prospects',      hex:'#3A9BC9', soft:'#E4F2F9', match:['prospect'] },
+  { key:'INTERNO',      label:'Grupo RIC',      hex:'#5C6779', soft:'#ECEEF2', match:['interno'], exact:['ric','grupo ric'] },
+  { key:'OUTROS',       label:'Outros',         hex:'#9AA6B5', soft:'#EEF1F5', match:['outro'] },
+  { key:'SEMCAT',       label:'Sem categoria',  hex:'#C5CCD6', soft:'#F1F3F6', match:[] }
+];
+function catInfo(raw){ const k = classifyCategory(raw); return CATS.find(c=>c.key===k) || CATS[CATS.length-1]; }
+
+/* ============================================================
+   Utilidades
+   ============================================================ */
+const norm = s => (s==null?'':String(s)).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim().toUpperCase();
+const nf = n => (n==null||isNaN(n)?0:n).toLocaleString('pt-BR');
+
+function classifyCategory(raw){
+  const n = norm(raw);
+  if(!n) return 'SEMCAT';
+  for(const c of CATS){
+    if((c.exact||[]).some(m => n === norm(m))) return c.key;
+    if(c.match.some(m => n.includes(norm(m)))) return c.key;
+  }
+  return 'OUTROS';
+}
+const isKnownCategory = raw => { const k = classifyCategory(raw); return k!=='OUTROS' && k!=='SEMCAT' || norm(raw).includes('OUTRO'); };
+function isConfirmed(status){
+  const n = norm(status);
+  if(!n) return false;
+  if(n.includes('NAO') || n.includes('PEND') || n.includes('AGUARD') || n.includes('CANCEL')) return false;
+  return n.includes('CONFIRM') || n === 'OK' || n.startsWith('SIM') || n === 'PRESENTE' || n === '1' || n === 'X' || n === '✓';
+}
+
+// Chave padronizada para agrupar o MESMO executivo escrito de formas diferentes
+// (maiúsc/minúsc, acento, espaços a mais). Ex: "Lorena Bertolin " e "lorena  bertolin" viram a mesma aba.
+function canonExec(s){ return norm(s).replace(/\s+/g,' ').trim(); }
+function cleanName(s){ return (s==null?'':String(s)).replace(/\s+/g,' ').trim(); }
+
+// Extrai a meta de um texto. Aceita número puro ("200") OU texto
+// como "META CONVIDADOS: 200" (pega o número logo após a palavra META).
+function extractMeta(txt){
+  if(txt==null) return null;
+  const s = String(txt).trim();
+  if(/^[\d.,\s]+$/.test(s)){
+    const n = Number(s.replace(/\./g,'').replace(',','.').replace(/\s/g,''));
+    if(!isNaN(n) && n>0) return n;
+  }
+  const m = s.match(/META[^0-9]*([0-9][0-9.]*)/i);
+  if(m){ const n = Number(m[1].replace(/\./g,'')); if(!isNaN(n) && n>0) return n; }
+  return null;
+}
+
+// Busca a chave de coluna por uma lista de nomes candidatos (tolerante a acentos/parciais)
+function findKey(headers, candidates){
+  const H = headers.map(h => ({ raw:h, n:norm(h) }));
+  for(const cand of candidates){ const nc=norm(cand); const hit=H.find(h=>h.n===nc); if(hit) return hit.raw; }
+  for(const cand of candidates){ const nc=norm(cand); const hit=H.find(h=>h.n.includes(nc)); if(hit) return hit.raw; }
+  return null;
+}
+
+/* ============================================================
+   Leitura da planilha (Google Visualization API / gviz)
+   ============================================================ */
+// Leitura via JSONP (script tag): funciona em qualquer origem,
+// inclusive abrindo o arquivo direto do computador (file://), sem bloqueio de CORS.
+let __jsonpId = 0;
+function fetchTable(opts){
+  return new Promise((resolve, reject) => {
+    const cb = '__gviz_cb_' + (++__jsonpId) + '_' + Date.now();
+    let url = `https://docs.google.com/spreadsheets/d/${CONFIG.sheetId}/gviz/tq?tqx=out:json;responseHandler:${cb}`;
+    if(opts.gid!=null && opts.gid!=='') url += `&gid=${encodeURIComponent(opts.gid)}`;
+    else if(opts.name) url += `&sheet=${encodeURIComponent(opts.name)}`;
+    if(opts.range) url += `&range=${encodeURIComponent(opts.range)}`;
+    url += `&headers=0&_=${Date.now()}`; // evita cache para refletir mudanças
+
+    const script = document.createElement('script');
+    let done = false;
+    const cleanup = () => { try{ delete window[cb]; }catch(e){} if(script.parentNode) script.parentNode.removeChild(script); };
+    const timer = setTimeout(() => { if(!done){ done=true; cleanup(); reject(new Error('Tempo esgotado ao ler a planilha')); } }, 15000);
+
+    window[cb] = (resp) => {
+      done = true; clearTimeout(timer);
+      try{
+        if(resp && resp.status === 'error'){
+          reject(new Error((resp.errors&&resp.errors[0]&&resp.errors[0].detailed_message) || 'Erro ao consultar a planilha'));
+        } else {
+          resolve(resp.table);
+        }
+      } finally { cleanup(); }
+    };
+    script.onerror = () => { if(!done){ done=true; clearTimeout(timer); cleanup(); reject(new Error('Falha de rede ao carregar a planilha')); } };
+    script.src = url;
+    document.head.appendChild(script);
+  });
+}
+function parseTableSmart(table){
+  const cols = table.cols || [];
+  const cellv = c => c ? (c.v!=null ? c.v : (c.f!=null ? c.f : '')) : '';
+  const matrix = [cols.map(c => (c.label||'').trim()), ...(table.rows||[]).map(r => (r.c||[]).map(cellv))];
+  let hi = -1;
+  for(let i=0;i<Math.min(matrix.length,20);i++){
+    const n = matrix[i].map(norm);
+    if(n.some(x=>x.startsWith('NOME')) && n.some(x=>x.includes('EMPRESA')||x.includes('CARGO')||x.includes('CATEGORIA'))){ hi=i; break; }
+  }
+  if(hi<0) return parseTable(table);
+  const headers = matrix[hi].map((h,i)=> String(h||'').replace(/\s+/g,' ').trim() || ('col'+i));
+  const rows = matrix.slice(hi+1).map(r => { const o={}; headers.forEach((h,i)=> o[h] = r[i]!=null ? r[i] : ''); return o; });
+  return { headers, rows };
+}
+
+// Padroniza a aba LISTA deste evento em campos fixos:
+//  - status: coluna CONFIRMAÇÃO; se vazia, o "1" da 1ª coluna conta como confirmado
+//  - linhas do Grupo RIC/Clientes vêm com colunas deslocadas (CARGO = "RIC"/"CLIENTE")
+//  - "- prospect" no nome vira categoria Prospect
+//  - acompanhantes sem nome entram como vaga ("Acompanhante a definir")
+function normalizeMain(t){
+  const H = t.headers;
+  const kNome  = findKey(H, ['NOME COMPLETO','NOME','CONVIDADO']);
+  const kEmp   = findKey(H, ['EMPRESA','COMPANHIA','ORGANIZACAO']);
+  const kCat   = findKey(H, ['CATEGORIA','CLASSIFICACAO','PERFIL']);
+  const kCargo = findKey(H, ['CARGO','FUNCAO']);
+  const kStat  = findKey(H, ['CONFIRMACAO','STATUS','SITUACAO']);
+  const kResp  = findKey(H, ['RESPOSAVEL ADD LISTA','RESPONSAVEL ADD LISTA','ADD LISTA','EXECUTIVO RESPONSAVEL','EXECUTIVO']);
+  const kPri   = findKey(H, ['PRIODADE','PRIORIDADE']);
+  const kMark  = H[0] && /^col0$/.test(H[0]) ? H[0] : null;
+
+  const out = [];
+  for(const r of t.rows){
+    let nome  = kNome ? cleanName(r[kNome]) : '';
+    let emp   = kEmp ? cleanName(r[kEmp]) : '';
+    let cargo = kCargo ? cleanName(r[kCargo]) : '';
+    let cat   = kCat ? cleanName(r[kCat]) : '';
+    const resp = kResp ? cleanName(r[kResp]) : '';
+    if(!nome && !emp && !cargo && !cat) continue; // linha vazia
+
+    const nc = norm(cargo);
+    if(nc === 'RIC'){ cargo = emp; emp = 'GRUPO RIC'; cat = 'RIC'; }
+    else if(nc === 'CLIENTE'){ cargo = isKnownCategory(cat) ? '' : cat; cat = 'CLIENTE'; }
+
+    if(/[-–]\s*prospect/i.test(nome)){ nome = nome.replace(/\s*[-–]\s*prospect\s*/i,'').trim(); cat = 'PROSPECT'; }
+    nome = nome.replace(/\.$/,'').trim();
+    if(!nome) nome = classifyCategory(cat)==='ACOMPANHANTE' ? 'Acompanhante (a definir)' : 'Nome a definir';
+
+    let st = kStat ? cleanName(r[kStat]) : '';
+    if(!st && kMark){ const m = String(r[kMark]==null?'':r[kMark]).trim(); st = (m==='1'||m==='1.0') ? 'Confirmado' : ''; }
+
+    out.push({ NOME:nome, EMPRESA:emp, CARGO:cargo, CATEGORIA:cat, STATUS:st || 'Pendente', RESPONSAVEL:resp, PRIORIDADE: kPri ? cleanName(r[kPri]) : '' });
+  }
+  return { headers:['NOME','EMPRESA','CARGO','CATEGORIA','STATUS','RESPONSAVEL','PRIORIDADE'], rows: out };
+}
+
+function parseTable(table){
+  const cols = table.cols || [];
+  let headers = cols.map(c => (c.label||'').trim());
+  let rows = (table.rows || []);
+  // Se não houver rótulos de coluna, usa a 1ª linha como cabeçalho
+  if(headers.every(h => !h) && rows.length){
+    headers = (rows[0].c||[]).map(c => c && c.v!=null ? String(c.v).trim() : '');
+    rows = rows.slice(1);
+  }
+  const data = rows.map(r => {
+    const o = {};
+    (r.c||[]).forEach((cell,i) => {
+      const key = headers[i] || ('col'+i);
+      o[key] = cell ? (cell.v!=null ? cell.v : (cell.f!=null ? cell.f : '')) : '';
+    });
+    return o;
+  });
+  return { headers: headers.filter(Boolean), rows: data };
+}
+
+/* ============================================================
+   Estado e Chart
+   ============================================================ */
+let pieChart = null;
+let activeTab = null;
+
+/* ============================================================
+   Carregamento principal
+   ============================================================ */
+async function loadAll(){
+  const btn = document.getElementById('btnRefresh');
+  btn.classList.add('loading');
+  try{
+    // 1) aba principal
+    const main = normalizeMain(parseTableSmart(await fetchTable({ gid: CONFIG.mainGid })));
+
+    // 2) meta: lê a célula configurada (ex: D2) e, se não achar, varre o cabeçalho
+    let meta = Number(CONFIG.meta.fallback) || 0;
+    let metaFound = false;
+    if(CONFIG.meta.cell){
+      try{
+        const t = await fetchTable({ gid: CONFIG.meta.gid!=null?CONFIG.meta.gid:CONFIG.mainGid, range: CONFIG.meta.cell });
+        const cell = t.rows && t.rows[0] && t.rows[0].c && t.rows[0].c[0];
+        const v = cell ? (cell.v!=null?cell.v:cell.f) : null;
+        const e = extractMeta(v);
+        if(e){ meta = e; metaFound = true; }
+      }catch(e){ /* segue para o reforço abaixo */ }
+    }
+    // reforço: a meta também aparece no cabeçalho ("META CONVIDADOS: 200")
+    if(!metaFound){
+      const e2 = extractMeta(main.headers.join(' | '));
+      if(e2) meta = e2;
+    }
+
+    // 3) 2ª aba — confirmados sem nome na lista
+    let semNomePeople = []; let semNomeTotal = 0;
+    try{
+      const t2 = parseTableSmart(await fetchTable({ gid: CONFIG.secondTab.gid, name: CONFIG.secondTab.name }));
+      const r = computeSemNome(t2);
+      semNomePeople = r.people; semNomeTotal = r.total;
+    }catch(e){
+      console.warn('2ª aba não lida:', e.message);
+    }
+
+    render(main, meta, semNomePeople, semNomeTotal);
+    clearError();
+    document.getElementById('updatedAt').textContent =
+      new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  }catch(err){
+    console.error(err);
+    showError(err.message);
+  }finally{
+    btn.classList.remove('loading');
+  }
+}
+
+function computeSemNome(t2){
+  const kExec  = findKey(t2.headers, ['EXECUTIVO RESPONSAVEL','RESPOSAVEL ADD LISTA','RESPONSAVEL ADD LISTA','ADD LISTA','EXECUTIVO','RESPONSAVEL']);
+  const kNome  = findKey(t2.headers, ['NOME','NOME COMPLETO','PRIMEIRO NOME','NAME']);
+  const kSob   = findKey(t2.headers, ['SOBRENOME','ULTIMO NOME']);
+  const kCargo = findKey(t2.headers, ['CARGO','FUNCAO','FUNÇÃO']);
+  const kEmp   = findKey(t2.headers, ['EMPRESA','COMPANHIA']);
+
+  const people = [];
+  for(const row of t2.rows){
+    // só linhas com convidado de verdade (ignora linhas em branco com nº de ordem)
+    const nome = kNome ? cleanName(row[kNome]) : '';
+    const sob  = kSob  ? cleanName(row[kSob])  : '';
+    if(!nome && !sob) continue;
+    people.push({
+      nome: (nome + ' ' + sob).trim(),
+      empresa: kEmp ? cleanName(row[kEmp]) : '',
+      cargo: kCargo ? cleanName(row[kCargo]) : '',
+      exec: kExec ? cleanName(row[kExec]) : ''
+    });
+  }
+  return { total: people.length, people };
+}
+
+/* ============================================================
+   Render
+   ============================================================ */
+function render(main, meta, semNomePeople, semNomeTotal){
+  const H = main.headers;
+  const kNome  = findKey(H, ['NOME']);
+  const kEmp   = findKey(H, ['EMPRESA']);
+  const kCat   = findKey(H, ['CATEGORIA']);
+  const kCargo = findKey(H, ['CARGO']);
+  const kStat  = findKey(H, ['STATUS']);
+  const kExec  = findKey(H, ['RESPONSAVEL']);
+
+  // convidados cadastrados = linhas com nome
+  const registered = main.rows.filter(r => kNome && String(r[kNome]).trim()!=='');
+  const cadastrados = registered.length;
+  const confirmadosLista = registered.filter(r => isConfirmed(r[kStat]));
+  const nConfLista = confirmadosLista.length;
+  const totalConfirmados = nConfLista + semNomeTotal;
+  const pendentes = Math.max(0, cadastrados - nConfLista);
+  const pct = cadastrados ? Math.round((nConfLista/cadastrados)*100) : 0;
+
+  // ---- KPIs ----
+  setKpi('kMeta', nf(meta)); 
+  document.getElementById('kMetaSub').innerHTML = meta ? `progresso: <span class="pos">${nf(totalConfirmados)}</span> de ${nf(meta)}` : 'meta não definida';
+  document.getElementById('kMetaBar').style.width = (meta ? Math.min(100,(totalConfirmados/meta)*100) : 0)+'%';
+
+  setKpi('kCad', nf(cadastrados));
+  document.getElementById('kCadSub').textContent = 'nomes na lista prévia';
+
+  setKpi('kConf', nf(totalConfirmados));
+  document.getElementById('kConfSub').innerHTML = semNomeTotal>0
+    ? `${nf(nConfLista)} na lista + <b>${nf(semNomeTotal)}</b> sem nome`
+    : 'total confirmado';
+
+  setKpi('kSem', nf(semNomeTotal));
+  document.getElementById('kSemSub').textContent = semNomeTotal===1 ? 'confirmado sem nome (2ª aba)' : 'confirmados sem nome (2ª aba)';
+
+  // ---- Indicador pendentes ----
+  document.getElementById('pendNum').textContent = nf(pendentes);
+  document.getElementById('pendSub').textContent = pendentes===1 ? 'convidado ainda não confirmado' : 'convidados ainda não confirmados';
+  document.getElementById('pendBar').style.width = (cadastrados ? (nConfLista/cadastrados)*100 : 0)+'%';
+  document.getElementById('pendConf').textContent = nf(nConfLista)+' confirmados';
+  document.getElementById('pendCad').textContent = nf(cadastrados)+' cadastrados';
+
+  // ---- Gráfico de categorias (sobre os cadastrados) ----
+  renderChart(registered, kCat);
+
+  // ---- Abas por executivo ----
+  renderTabs(confirmadosLista, semNomePeople, { kNome, kEmp, kCat, kStat, kExec, kCargo });
+
+  // ---- Interface "Lista" (1ª aba + 2ª aba) ----
+  const listaMain = registered.map(r => {
+    const conf = isConfirmed(r[kStat]);
+    return {
+      nome: kNome ? cleanName(r[kNome]) : '',
+      empresa: kEmp ? cleanName(r[kEmp]) : '',
+      cargo: kCargo ? cleanName(r[kCargo]) : '',
+      exec: kExec ? cleanName(r[kExec]) : '',
+      categoria: catInfo(kCat ? r[kCat] : ''),
+      confirmado: conf,
+      status: cleanName(kStat ? r[kStat] : '') || (conf ? 'Confirmado' : 'Pendente'),
+      origem: 'Lista prévia'
+    };
+  });
+  const listaSem = (semNomePeople||[]).map(p => ({
+    nome: p.nome, empresa: p.empresa, cargo: p.cargo, exec: p.exec,
+    categoria: null, confirmado: true, status: 'Confirmado', origem: 'Sem nome na lista'
+  }));
+  setupLista([...listaMain, ...listaSem]);
+}
+
+function setKpi(id, val){
+  const el = document.getElementById(id);
+  el.classList.remove('skel'); el.textContent = val;
+}
+
+function renderChart(registered, kCat){
+  const counts = {}; CATS.forEach(c => counts[c.key]=0);
+  registered.forEach(r => { counts[classifyCategory(kCat?r[kCat]:'')]++; });
+  const present = CATS.filter(c => counts[c.key] > 0);
+  const total = registered.length || 1;
+
+  document.getElementById('pieTotal').textContent = nf(registered.length);
+
+  // legenda
+  const legend = document.getElementById('legend');
+  legend.innerHTML = present.length ? present.map(c => {
+    const q = counts[c.key]; const p = Math.round((q/total)*100);
+    return `<div class="legend-item">
+      <span class="dot" style="background:${c.hex}"></span>
+      <span class="legend-name">${c.label}</span>
+      <span class="legend-qty num">${nf(q)}</span>
+      <span class="legend-pct num">${p}%</span>
+    </div>`;
+  }).join('') : `<div class="empty">Sem dados de categoria.</div>`;
+
+  const data = {
+    labels: present.map(c=>c.label),
+    datasets:[{
+      data: present.map(c=>counts[c.key]),
+      backgroundColor: present.map(c=>c.hex),
+      borderColor:'#fff', borderWidth:3, hoverOffset:6
+    }]
+  };
+  const opts = {
+    cutout:'66%', responsive:true, maintainAspectRatio:false,
+    plugins:{
+      legend:{display:false},
+      tooltip:{
+        backgroundColor:'#0E1726', padding:11, cornerRadius:8, titleFont:{family:'Montserrat',weight:'600'}, bodyFont:{family:'Montserrat'},
+        callbacks:{ label:(ctx)=>{ const v=ctx.parsed; const p=Math.round((v/total)*100); return ` ${nf(v)} convidados · ${p}%`; } }
+      }
+    }
+  };
+  if(pieChart){ pieChart.data=data; pieChart.options=opts; pieChart.update(); }
+  else { pieChart = new Chart(document.getElementById('pie'), { type:'doughnut', data, options:opts }); }
+}
+
+function renderTabs(confirmadosLista, semNomePeople, K){
+  // agrupa confirmados na lista por executivo PADRONIZADO (une o MESMO nome escrito
+  // diferente; NÃO mistura nomes diferentes nem mistura com a 2ª aba)
+  const groups = {}; // canon -> { display, guests }
+  confirmadosLista.forEach(r => {
+    const display = (K.kExec ? cleanName(r[K.kExec]) : '') || 'Sem responsável';
+    const key = canonExec(display) || 'SEM RESPONSAVEL';
+    if(!groups[key]) groups[key] = { display, guests:[] };
+    groups[key].guests.push(r);
+  });
+
+  // abas dos executivos, em ordem alfabética
+  const execKeys = Object.keys(groups).sort((a,b)=> groups[a].display.localeCompare(groups[b].display,'pt-BR'));
+
+  // aba dedicada "Sem nome na lista" (sempre por último), com os nomes da 2ª aba
+  const SEM = '__SEM_NOME__';
+  const hasSem = Array.isArray(semNomePeople) && semNomePeople.length > 0;
+  const keys = hasSem ? [...execKeys, SEM] : execKeys;
+
+  const tabbar = document.getElementById('tabbar');
+  const panels = document.getElementById('panels');
+
+  if(!keys.length){
+    tabbar.innerHTML=''; panels.innerHTML = `<div class="panel"><div class="empty">Nenhum convidado confirmado ainda.</div></div>`;
+    return;
+  }
+  if(!activeTab || !keys.includes(activeTab)) activeTab = keys[0];
+
+  tabbar.innerHTML = keys.map(key => {
+    if(key === SEM){
+      return `<button class="tab tab-sem ${key===activeTab?'active':''}" role="tab" data-key="${encodeURIComponent(key)}">
+        Sem nome na lista<span class="cnt num">${nf(semNomePeople.length)}</span></button>`;
+    }
+    return `<button class="tab ${key===activeTab?'active':''}" role="tab" data-key="${encodeURIComponent(key)}">
+      ${esc(groups[key].display)}<span class="cnt num">${nf(groups[key].guests.length)}</span></button>`;
+  }).join('');
+
+  panels.innerHTML = keys.map(key => {
+    if(key === SEM) return buildSemNomePanel(SEM, semNomePeople, key===activeTab);
+    return buildPanel(key, groups[key].display, groups[key].guests, K, key===activeTab);
+  }).join('');
+
+  tabbar.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = decodeURIComponent(btn.dataset.key);
+      tabbar.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b===btn));
+      panels.querySelectorAll('.panel').forEach(p=>p.style.display = (decodeURIComponent(p.dataset.key)===activeTab?'block':'none'));
+    });
+  });
+}
+
+function buildPanel(key, display, guests, K, visible){
+  const rows = guests.length ? guests.map(g => {
+    const nome  = K.kNome ? g[K.kNome] : '';
+    const emp   = K.kEmp ? g[K.kEmp] : '';
+    const cargo = K.kCargo ? g[K.kCargo] : '';
+    const ci = catInfo(K.kCat ? g[K.kCat] : '');
+    return `<tr>
+      <td class="cell-name">${esc(nome)||'—'}</td>
+      <td>${esc(emp)||'—'}</td>
+      <td>${esc(cargo)||'—'}</td>
+      <td><span class="pill ok">Confirmado</span></td>
+      <td><span class="tag" style="background:${ci.soft};color:${ci.hex}">${esc(ci.label)}</span></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="5" class="empty">Nenhum confirmado com nome na lista para este responsável.</td></tr>`;
+
+  return `<div class="panel" data-key="${encodeURIComponent(key)}" role="tabpanel" style="display:${visible?'block':'none'}">
+    <div class="panel-summary">
+      <div class="chip green"><div class="l">Confirmados</div><div class="v num">${nf(guests.length)}</div></div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nome</th><th>Empresa</th><th>Cargo</th><th>Status</th><th>Categoria</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function buildSemNomePanel(key, people, visible){
+  const rows = people.length ? people.map(p => `<tr>
+      <td class="cell-name">${esc(p.nome)||'—'}</td>
+      <td>${esc(p.empresa)||'—'}</td>
+      <td>${esc(p.cargo)||'—'}</td>
+      <td>${esc(p.exec)||'—'}</td>
+      <td><span class="pill ok">Confirmado</span></td>
+    </tr>`).join('') : `<tr><td colspan="5" class="empty">Nenhum confirmado sem nome na lista.</td></tr>`;
+
+  return `<div class="panel" data-key="${encodeURIComponent(key)}" role="tabpanel" style="display:${visible?'block':'none'}">
+    <p class="noname-note">Convidados confirmados que ainda não têm nome na lista prévia (vindos da segunda aba da planilha). Estão somados ao total de confirmados.</p>
+    <div class="panel-summary">
+      <div class="chip gold"><div class="l">Sem nome na lista</div><div class="v num">${nf(people.length)}</div></div>
+    </div>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Nome</th><th>Empresa</th><th>Cargo</th><th>Responsável</th><th>Status</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+
+/* ============================================================
+   Interface "Lista" — lista completa com filtros por empresa e cargo
+   ============================================================ */
+let LISTA = [];
+function uniqueSorted(arr){
+  return Array.from(new Set(arr.map(s => String(s||'').trim()).filter(Boolean)))
+    .sort((a,b)=>a.localeCompare(b,'pt-BR'));
+}
+function fillSelect(id, values, placeholder){
+  const sel = document.getElementById(id);
+  const cur = sel.value;
+  sel.innerHTML = `<option value="">${placeholder}</option>` +
+    values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  if(values.includes(cur)) sel.value = cur; // preserva seleção ao atualizar
+}
+function setupLista(data){
+  LISTA = data || [];
+  fillSelect('fEmpresa', uniqueSorted(LISTA.map(x=>x.empresa)), 'Todas as empresas');
+  fillSelect('fCargo',   uniqueSorted(LISTA.map(x=>x.cargo)),   'Todos os cargos');
+  applyLista();
+}
+function applyLista(){
+  const emp = document.getElementById('fEmpresa').value;
+  const car = document.getElementById('fCargo').value;
+  const q   = (document.getElementById('fBusca').value||'').trim().toLowerCase();
+
+  const rows = LISTA.filter(x =>
+    (!emp || x.empresa === emp) &&
+    (!car || x.cargo === car) &&
+    (!q || (x.nome||'').toLowerCase().includes(q))
+  );
+
+  document.getElementById('listaCount').textContent =
+    `${nf(rows.length)} de ${nf(LISTA.length)} registros`;
+
+  const tbody = document.getElementById('listaBody');
+  tbody.innerHTML = rows.length ? rows.map(x => {
+    const cat = x.categoria
+      ? `<span class="tag" style="background:${x.categoria.soft};color:${x.categoria.hex}">${esc(x.categoria.label)}</span>`
+      : '<span class="tag">—</span>';
+    const status = x.confirmado
+      ? '<span class="pill ok">Confirmado</span>'
+      : `<span class="pill wait">${esc(x.status||'Pendente')}</span>`;
+    return `<tr>
+      <td class="cell-name">${esc(x.nome)||'—'}</td>
+      <td>${esc(x.empresa)||'—'}</td>
+      <td>${esc(x.cargo)||'—'}</td>
+      <td>${esc(x.exec)||'—'}</td>
+      <td>${cat}</td>
+      <td>${status}</td>
+      <td><span class="tag">${esc(x.origem)}</span></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty">Nenhum registro com esses filtros.</td></tr>`;
+}
+
+/* ---- Troca de interface (Painel / Lista) ---- */
+function showView(view){
+  document.getElementById('viewPainel').style.display = (view==='painel') ? 'block' : 'none';
+  document.getElementById('viewLista').style.display  = (view==='lista')  ? 'block' : 'none';
+  document.querySelectorAll('#viewnav button').forEach(b => b.classList.toggle('active', b.dataset.view===view));
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ============================================================
+   Erros
+   ============================================================ */
+function showError(msg){
+  document.getElementById('statusBanner').innerHTML =
+    `<div class="alert err"><b>Não foi possível ler a planilha.</b>&nbsp; ${esc(msg)} — verifique se ela está publicada na web e acessível por link.</div>`;
+}
+function clearError(){ document.getElementById('statusBanner').innerHTML=''; }
+
+/* ============================================================
+   Início + atualização automática
+   ============================================================ */
+// navegação entre interfaces
+document.querySelectorAll('#viewnav button').forEach(b =>
+  b.addEventListener('click', () => showView(b.dataset.view)));
+
+// filtros da Lista
+document.getElementById('fEmpresa').addEventListener('change', applyLista);
+document.getElementById('fCargo').addEventListener('change', applyLista);
+document.getElementById('fBusca').addEventListener('input', applyLista);
+document.getElementById('fLimpar').addEventListener('click', () => {
+  document.getElementById('fEmpresa').value = '';
+  document.getElementById('fCargo').value = '';
+  document.getElementById('fBusca').value = '';
+  applyLista();
+});
+
+document.getElementById('btnRefresh').addEventListener('click', loadAll);
+loadAll();
+setInterval(loadAll, CONFIG.refreshMs);
+</script>
+</body>
+</html>
