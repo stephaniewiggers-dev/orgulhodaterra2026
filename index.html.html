@@ -394,6 +394,12 @@ const CONFIG = {
   // Meta fixa do evento (a planilha diz 180, a meta combinada é 200):
   meta: { gid: null, cell: null, fallback: 200 },
 
+  // Aba criada pela automação do Sympla — as confirmações vêm daqui:
+  symplaTab: 'Participantes',
+
+  // true = o "1" da 1ª coluna da LISTA também conta como confirmado
+  markerAsConfirmed: false,
+
   refreshMs: 60000
 };
 
@@ -548,7 +554,7 @@ function normalizeMain(t){
     if(!nome) nome = classifyCategory(cat)==='ACOMPANHANTE' ? 'Acompanhante (a definir)' : 'Nome a definir';
 
     let st = kStat ? cleanName(r[kStat]) : '';
-    if(!st && kMark){ const m = String(r[kMark]==null?'':r[kMark]).trim(); st = (m==='1'||m==='1.0') ? 'Confirmado' : ''; }
+    if(!st && kMark && CONFIG.markerAsConfirmed){ const m = String(r[kMark]==null?'':r[kMark]).trim(); st = (m==='1'||m==='1.0') ? 'Confirmado' : ''; }
 
     out.push({ NOME:nome, EMPRESA:emp, CARGO:cargo, CATEGORIA:cat, STATUS:st || 'Pendente', RESPONSAVEL:resp, PRIORIDADE: kPri ? cleanName(r[kPri]) : '' });
   }
@@ -619,6 +625,23 @@ async function loadAll(){
       console.warn('2ª aba não lida:', e.message);
     }
 
+    // 4) Sympla (aba "Participantes") — confirma quem está na LISTA e
+    //    manda para "Sem nome na lista" quem confirmou mas não foi achado
+    if(CONFIG.symplaTab){
+      try{
+        const ts = parseTableSmart(await fetchTable({ name: CONFIG.symplaTab }));
+        const rec = reconcile(main, readSympla(ts));
+        const seen = new Set(semNomePeople.map(p => nameTokens(p.nome).join(' ')));
+        for(const p of rec.unmatched){
+          const k = nameTokens(p.nome).join(' ');
+          if(!seen.has(k)){ seen.add(k); semNomePeople.push(p); }
+        }
+        semNomeTotal = semNomePeople.length;
+      }catch(e){
+        console.warn('Aba do Sympla não lida:', e.message);
+      }
+    }
+
     render(main, meta, semNomePeople, semNomeTotal);
     clearError();
     document.getElementById('updatedAt').textContent =
@@ -652,6 +675,65 @@ function computeSemNome(t2){
     });
   }
   return { total: people.length, people };
+}
+
+/* ============================================================
+   Conciliação Sympla x LISTA
+   Cada confirmado no Sympla é procurado na LISTA pelo nome
+   (ignora acentos, maiúsculas, "de/da/dos" e pequenos erros de
+   digitação). Achou -> a linha da LISTA vira Confirmado.
+   Não achou -> entra em "Sem nome na lista".
+   ============================================================ */
+const STOP = new Set(['DE','DA','DO','DAS','DOS','E','D']);
+const nameTokens = s => norm(s).replace(/[^A-Z0-9 ]/g,' ').split(' ').filter(t => t && !STOP.has(t));
+function lev(a,b){
+  if(a===b) return 0;
+  const m=a.length,n=b.length; if(Math.abs(m-n)>2) return 3;
+  let prev=Array.from({length:n+1},(_,i)=>i);
+  for(let i=1;i<=m;i++){ const cur=[i];
+    for(let j=1;j<=n;j++) cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));
+    prev=cur; }
+  return prev[n];
+}
+const tokEq = (a,b) => a===b || (Math.min(a.length,b.length)>=5 && lev(a,b)<=1) || (Math.min(a.length,b.length)>=9 && lev(a,b)<=2);
+function nameScore(a,b){            // a, b = listas de tokens
+  if(a.length<2 || b.length<2){     // nome colado ("RICARDOCASTILHO") ou nome único
+    const ja=a.join(''), jb=b.join('');
+    return (ja.length>=8 && ja===jb) ? 90 : 0;
+  }
+  if(a.join(' ')===b.join(' ')) return 100;
+  const [s,l] = a.length<=b.length ? [a,b] : [b,a];
+  const shared = s.filter(t => l.some(u => tokEq(t,u))).length;
+  const firstOk = tokEq(a[0],b[0]), lastOk = tokEq(a[a.length-1],b[b.length-1]);
+  if(firstOk && lastOk) return 60 + shared;
+  if(shared===s.length && firstOk) return 50 + shared;   // nome curto contido no nome completo
+  if(a.join('')===b.join('')) return 90;
+  return 0;
+}
+function readSympla(t){
+  const H=t.headers;
+  const kNome=findKey(H,['NOME','PRIMEIRO NOME']), kSob=findKey(H,['SOBRENOME','ULTIMO NOME']);
+  const kEmp=findKey(H,['EMPRESA']), kCargo=findKey(H,['CARGO']), kStat=findKey(H,['STATUS','SITUACAO']);
+  const out=[];
+  for(const r of t.rows){
+    const nome=((kNome?cleanName(r[kNome]):'')+' '+(kSob?cleanName(r[kSob]):'')).trim();
+    if(!nome) continue;
+    if(kStat && !isConfirmed(r[kStat])) continue;   // cancelados/pendentes não contam
+    out.push({ nome, empresa:kEmp?cleanName(r[kEmp]):'', cargo:kCargo?cleanName(r[kCargo]):'' });
+  }
+  return out;
+}
+function reconcile(main, sympla){
+  const rows = main.rows.map(r => ({ r, tk: /a definir\)?$/i.test(r.NOME) ? [] : nameTokens(r.NOME), used:false }));
+  const unmatched=[]; let matched=0;
+  for(const p of sympla){
+    const tk=nameTokens(p.nome); let best=null, bs=0;
+    for(const x of rows){ if(x.used || !x.tk.length) continue;
+      const sc=nameScore(tk,x.tk); if(sc>bs){ bs=sc; best=x; } }
+    if(best && bs>=50){ best.used=true; best.r.STATUS='Confirmado'; best.r.SYMPLA=true; matched++; }
+    else unmatched.push({ nome:p.nome, empresa:p.empresa, cargo:p.cargo, exec:'' });
+  }
+  return { matched, unmatched };
 }
 
 /* ============================================================
