@@ -730,7 +730,9 @@ function reconcile(main, sympla){
     const tk=nameTokens(p.nome); let best=null, bs=0;
     for(const x of rows){ if(x.used || !x.tk.length) continue;
       const sc=nameScore(tk,x.tk); if(sc>bs){ bs=sc; best=x; } }
-    if(best && bs>=50){ best.used=true; best.r.STATUS='Confirmado'; best.r.SYMPLA=true; matched++; }
+    if(best && bs>=50){ best.used=true; best.r.STATUS='Confirmado'; best.r.SYMPLA=true; matched++;
+      if(!best.r.EMPRESA && p.empresa) best.r.EMPRESA=p.empresa;
+      if(!best.r.CARGO && p.cargo) best.r.CARGO=p.cargo; }
     else unmatched.push({ nome:p.nome, empresa:p.empresa, cargo:p.cargo, exec:'' });
   }
   return { matched, unmatched };
